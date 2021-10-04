@@ -6,7 +6,7 @@ from PIL import Image
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
-        print "Usage: %s [image name]" % (sys.argv[0],)
+        print("Usage: %s [image name]" % (sys.argv[0],))
         sys.exit(-1)
 
     im = Image.open(sys.argv[1])
@@ -20,14 +20,19 @@ if __name__ == "__main__":
     f.write("static const uint8_t %s_DATA[]={" % (filename.upper()))
 
 
-    for y in xrange(0, im.size[1]):
-        for x in xrange(0, im.size[0]):
-            r, g, b, a = pix[x, y]
-            f.write("%s, " % hex(r))
-            f.write("%s, " % hex(g))
-            f.write("%s, " % hex(b))
-            f.write("%s, " % hex(a))
-
+    for y in range(0, im.size[1]):
+       for x in range(0, im.size[0]):
+            try:
+                r, g, b = pix[x, y]
+                f.write("%s, " % hex(r))
+                f.write("%s, " % hex(g))
+                f.write("%s, " % hex(b))
+            except ValueError:
+                r, g, b, a = pix[x, y]
+                f.write("%s, " % hex(r))
+                f.write("%s, " % hex(g))
+                f.write("%s, " % hex(b))
+            
     f.write("};\n")
     f.close()
 
